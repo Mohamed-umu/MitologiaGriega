@@ -1,0 +1,46 @@
+
+<kmodule xmlns="http://www.drools.org/xsd/kmodule">
+
+    <!-- F2-1: Perseo libera a Andromeda con ayuda de los dioses -->
+    <kbase name="mitologiaKB"
+           packages="com.sample.rules"
+           default="true">
+        <ksession name="mitologiaSession"
+                  type="stateful"
+                  default="true"/>
+    </kbase>
+
+    <!-- F2-2:Teseo mata al Minotauro y Dedalo e Icaro escapan del laberinto -->
+    <kbase name="laberintoKB"
+           packages="mitologia.reglas.laberinto">
+        <ksession name="laberintoSession"
+                  type="stateful"/>
+    </kbase>
+
+    <!-- F2-3: Teseo libera a Andromeda en lugar de Perseo -->
+    <!-- F2-4:Perseo usa las alas de Dedalo para conseguir volar -->
+    <!-- tamb aqui se juntan las reglas de los dos primeros mitos -->
+    <kbase name="integradaKB"
+           packages="com.sample.rules,mitologia.reglas.laberinto,mitologia.reglas.integradas">
+        <ksession name="integradaSession"
+                  type="stateful"/>
+    </kbase>
+
+    <!-- F2-5: Un heroe es liberado del Minotauro y despues rescata a Andromeda -->
+    <!-- F2-6: Una heroina rescata a un personaje masculino -->
+    <!-- F2-7: Tres heroes compiten y uno consigue las tres cabezas -->
+    <kbase name="nuevosKB"
+           packages="mitologia.reglas.nuevos">
+        <ksession name="nuevosSession"
+                  type="stateful"/>
+    </kbase>
+
+    <!-- F2-8: Ariadna libera a Dedalo y despues rescata a Andromeda -->
+    <!-- Usar las reglas anteriores junto con las del mito nuevo -->
+    <kbase name="f8KB"
+           packages="mitologia.reglas.nuevos,mitologia.reglas.f8">
+        <ksession name="f8Session"
+                  type="stateful"/>
+    </kbase>
+
+</kmodule>
