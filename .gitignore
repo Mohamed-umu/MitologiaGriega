@@ -1,3 +1,7 @@
 /target/ 
 /bin/ 
 *.class 
+/soluciones_positivas/
+/soluciones_negativas/
+/soluciones_alternativas/
+/src/main/resources/META-INF/maven/
