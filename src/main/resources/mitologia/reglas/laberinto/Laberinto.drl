@@ -1,0 +1,474 @@
+
+package mitologia.reglas.laberinto
+
+import mitologia.modelo.Ser;
+import mitologia.modelo.Humano;
+import mitologia.modelo.Heroe;
+import mitologia.modelo.CriaturaTerrestre;
+import mitologia.modelo.Objeto;
+import mitologia.modelo.Lugar;
+import mitologia.modelo.EventoLaberinto;
+
+
+// 01. MINOS ORDENA CONSTRUIR EL LABERINTO
+
+rule "01 Construir laberinto"
+when
+    Humano(nombre == "Minos", vivo == true)
+    Humano(nombre == "Dedalo", vivo == true)
+    Humano(nombre == "Icaro", vivo == true)
+    Lugar(nombre == "Laberinto")
+
+    not EventoLaberinto(
+        tipo == "LaberintoConstruido"
+    )
+then
+    System.out.println(
+        "Minos ordena a Dedalo e Icaro construir el laberinto"
+    );
+
+    insert(new EventoLaberinto(
+        "LaberintoConstruido"
+    ));
+end
+
+
+// 02. EL MINOTAURO QUEDA ENCERRADO
+
+rule "02 Encerrar Minotauro"
+when
+    EventoLaberinto(
+        tipo == "LaberintoConstruido"
+    )
+
+    $lab : Lugar(nombre == "Laberinto")
+
+    $mino : CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == true,
+        ubicacion == null
+    )
+then
+    System.out.println(
+        "Minos encierra al Minotauro en el laberinto"
+    );
+
+    modify($mino) {
+        setUbicacion($lab)
+    }
+end
+
+
+// 03. ARIADNA AYUDA A TESEO
+
+rule "03 Entregar hilo de Ariadna"
+when
+    EventoLaberinto(
+        tipo == "LaberintoConstruido"
+    )
+
+    $ariadna : Humano(
+        nombre == "Ariadna",
+        vivo == true
+    )
+
+    $teseo : Heroe(
+        nombre == "Teseo",
+        vivo == true
+    )
+
+    $hilo : Objeto(
+        nombre == "HiloAriadna",
+        existe == true,
+        propietario == $ariadna
+    )
+then
+    System.out.println(
+        "Ariadna entrega su hilo a Teseo"
+    );
+
+    modify($hilo) {
+        setPropietario($teseo)
+    }
+end
+
+
+// 04. TESEO ENTRA EN EL LABERINTO
+
+rule "04 Teseo entra en laberinto"
+when
+    $lab : Lugar(nombre == "Laberinto")
+
+    $teseo : Heroe(
+        nombre == "Teseo",
+        vivo == true,
+        libre == true,
+        ubicacion != $lab
+    )
+
+    Objeto(
+        nombre == "HiloAriadna",
+        propietario == $teseo,
+        existe == true
+    )
+
+    CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == true,
+        ubicacion == $lab
+    )
+then
+    System.out.println(
+        "Teseo entra en el laberinto siguiendo el hilo"
+    );
+
+    modify($teseo) {
+        setUbicacion($lab)
+    }
+end
+
+
+// 05. TESEO MATA AL MINOTAURO
+
+rule "05 Teseo mata Minotauro"
+when
+    $lab : Lugar(nombre == "Laberinto")
+
+    $teseo : Heroe(
+        nombre == "Teseo",
+        vivo == true,
+        libre == true,
+        ubicacion == $lab
+    )
+
+    Objeto(
+        nombre == "EspadaTeseo",
+        existe == true,
+        roto == false,
+        propietario == $teseo
+    )
+
+    $mino : CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == true,
+        ubicacion == $lab
+    )
+then
+    System.out.println(
+        "Teseo lucha contra el Minotauro y lo mata"
+    );
+
+    modify($mino) {
+        setVivo(false)
+    }
+
+    insert(new EventoLaberinto(
+        "MinotauroDerrotado"
+    ));
+end
+
+
+// 06. TESEO ESCAPA CON EL HILO
+
+rule "06 Teseo sale del laberinto"
+when
+    $lab : Lugar(nombre == "Laberinto")
+    $exterior : Lugar(nombre == "Exterior")
+
+    EventoLaberinto(
+        tipo == "MinotauroDerrotado"
+    )
+
+    $teseo : Heroe(
+        nombre == "Teseo",
+        vivo == true,
+        ubicacion == $lab
+    )
+
+    Objeto(
+        nombre == "HiloAriadna",
+        propietario == $teseo,
+        existe == true
+    )
+then
+    System.out.println(
+        "Teseo sale del laberinto gracias al hilo de Ariadna"
+    );
+
+    modify($teseo) {
+        setUbicacion($exterior)
+    }
+end
+
+
+// 07. MINOS ENCIERRA A DEDALO E ICARO
+
+rule "07 Castigo de Minos"
+when
+    $minos : Humano(
+        nombre == "Minos",
+        vivo == true
+    )
+
+    EventoLaberinto(
+        tipo == "MinotauroDerrotado"
+    )
+
+    $exterior : Lugar(nombre == "Exterior")
+    $lab : Lugar(nombre == "Laberinto")
+
+    Heroe(
+        nombre == "Teseo",
+        vivo == true,
+        ubicacion == $exterior
+    )
+
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        libre == true,
+        ubicacion == $exterior
+    )
+
+    $icaro : Humano(
+        nombre == "Icaro",
+        vivo == true,
+        libre == true,
+        ubicacion == $exterior
+    )
+then
+    System.out.println(
+        "Minos castiga a Dedalo e Icaro y los encierra en el laberinto"
+    );
+
+    modify($dedalo) {
+        setLibre(false),
+        setApresadoPor($minos),
+        setUbicacion($lab)
+    }
+
+    modify($icaro) {
+        setLibre(false),
+        setApresadoPor($minos),
+        setUbicacion($lab)
+    }
+end
+
+
+// 08. DEDALO ENCUENTRA MATERIALES
+
+rule "08 Encontrar materiales"
+when
+    $lab : Lugar(nombre == "Laberinto")
+
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        libre == false,
+        ubicacion == $lab
+    )
+
+    $plumas : Objeto(
+        nombre == "Plumas",
+        existe == true,
+        propietario == null
+    )
+
+    $cera : Objeto(
+        nombre == "CeraAbejas",
+        existe == true,
+        propietario == null
+    )
+then
+    System.out.println(
+        "Dedalo encuentra plumas y cera de abejas en el laberinto"
+    );
+
+    modify($plumas) {
+        setPropietario($dedalo)
+    }
+
+    modify($cera) {
+        setPropietario($dedalo)
+    }
+end
+
+
+// 09. DEDALO FABRICA DOS PARES DE ALAS
+
+rule "09 Fabricar alas"
+when
+    $lab : Lugar(nombre == "Laberinto")
+
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        ubicacion == $lab
+    )
+
+    $icaro : Humano(
+        nombre == "Icaro",
+        vivo == true,
+        ubicacion == $lab
+    )
+
+    Objeto(
+        nombre == "Plumas",
+        existe == true,
+        propietario == $dedalo
+    )
+
+    Objeto(
+        nombre == "CeraAbejas",
+        existe == true,
+        propietario == $dedalo
+    )
+
+    $alasD : Objeto(
+        nombre == "AlasDedalo",
+        existe == false,
+        propietario == null
+    )
+
+    $alasI : Objeto(
+        nombre == "AlasIcaro",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        "Dedalo fabrica dos pares de alas con cera y plumas"
+    );
+
+    modify($alasD) {
+        setExiste(true),
+        setPropietario($dedalo)
+    }
+
+    modify($alasI) {
+        setExiste(true),
+        setPropietario($icaro)
+    }
+end
+
+
+// 10. DEDALO E ICARO ESCAPAN VOLANDO
+
+rule "10 Escapar volando"
+when
+    $lab : Lugar(nombre == "Laberinto")
+    $cielo : Lugar(nombre == "Cielo")
+
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        libre == false,
+        ubicacion == $lab
+    )
+
+    $icaro : Humano(
+        nombre == "Icaro",
+        vivo == true,
+        libre == false,
+        ubicacion == $lab
+    )
+
+    Objeto(
+        nombre == "AlasDedalo",
+        existe == true,
+        roto == false,
+        propietario == $dedalo,
+        capacidad.nombre == "Vuelo"
+    )
+
+    Objeto(
+        nombre == "AlasIcaro",
+        existe == true,
+        roto == false,
+        propietario == $icaro,
+        capacidad.nombre == "Vuelo"
+    )
+then
+    System.out.println(
+        "Dedalo e Icaro escapan del laberinto utilizando sus alas"
+    );
+
+    modify($dedalo) {
+        setLibre(true),
+        setApresadoPor(null),
+        setUbicacion($cielo)
+    }
+
+    modify($icaro) {
+        setLibre(true),
+        setApresadoPor(null),
+        setUbicacion($cielo)
+    }
+end
+
+
+// 11. ICARO CAE AL MAR
+
+rule "11 Muerte de Icaro"
+when
+    $cielo : Lugar(nombre == "Cielo")
+    $mar : Lugar(nombre == "Mar")
+
+    $icaro : Humano(
+        nombre == "Icaro",
+        vivo == true,
+        ubicacion == $cielo
+    )
+
+    $alas : Objeto(
+        nombre == "AlasIcaro",
+        existe == true,
+        roto == false,
+        propietario == $icaro
+    )
+then
+    System.out.println(
+        "Icaro vuela demasiado cerca del sol, sus alas se rompen y cae al mar"
+    );
+
+    modify($alas) {
+        setRoto(true),
+        setPropietario(null)
+    }
+
+    modify($icaro) {
+        setVivo(false),
+        setUbicacion($mar)
+    }
+end
+
+
+// 12. DEDALO LLEGA A LA COSTA
+
+rule "12 Dedalo llega a la costa"
+when
+    $cielo : Lugar(nombre == "Cielo")
+    $costa : Lugar(nombre == "Costa")
+
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        libre == true,
+        ubicacion == $cielo
+    )
+
+    Objeto(
+        nombre == "AlasDedalo",
+        existe == true,
+        roto == false,
+        propietario == $dedalo
+    )
+then
+    System.out.println(
+        "Dedalo llega a la costa y sobrevive"
+    );
+
+    modify($dedalo) {
+        setUbicacion($costa)
+    }
+end
