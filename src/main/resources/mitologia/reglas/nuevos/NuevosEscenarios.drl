@@ -1,0 +1,614 @@
+
+package mitologia.reglas.nuevos
+
+import mitologia.modelo.Ser;
+import mitologia.modelo.Heroe;
+import mitologia.modelo.Personaje;
+import mitologia.modelo.Dios;
+import mitologia.modelo.Gorgona;
+import mitologia.modelo.CriaturaTerrestre;
+import mitologia.modelo.CriaturaMarina;
+import mitologia.modelo.Objeto;
+import mitologia.modelo.Arma;
+import mitologia.modelo.Hazana;
+import mitologia.modelo.EventoLaberinto;
+
+
+// Si Poseidon esta enfadado con Casiopea, manda a Ceto
+
+//Andromeda queda atrapada al empezar el mito
+
+rule "01 Poseidon castiga a Casiopea"
+when
+    //Buscar a Poseidon y comprobar el enojo de Casiopea
+    $poseidon : Dios(nombre == "Poseidon")
+
+    Personaje(
+        nombre == "Casiopea",
+        enojos contains $poseidon
+    )
+
+    // Ceto tiene q estar vivo
+    $ceto : CriaturaMarina(
+        nombre == "Ceto",
+        vivo == true
+    )
+
+    // Andromeda debe empezar viva y libre
+    $andromeda : Ser(
+        nombre == "Andromeda",
+        vivo == true,
+        libre == true,
+        apresadoPor == null
+    )
+then
+    System.out.println(
+        "Poseidon envia a Ceto contra Andromeda"
+    );
+
+    //Marca q Ceto la ha apresado
+    modify($andromeda) {
+        setLibre(false),
+        setApresadoPor($ceto)
+    }
+end
+
+
+// Un heroe libre puede enfrentarse al Minotauro
+//Necesita un armaa de combate y que haya alguien apresado
+
+rule "02 Derrotar al Minotauro"
+salience 60
+when
+    //Busca un heroe que pueda luchar
+    $heroe : Heroe(
+        vivo == true,
+        libre == true
+    )
+
+    //Necesitaa tener un arma con capacidad Combate
+    Arma(
+        existe == true,
+        roto == false,
+        propietario == $heroe,
+        capacidad != null,
+        capacidad.nombre == "Combate"
+    )
+
+    // El Minotauro debe estar vivo
+    $mino : CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == true
+    )
+
+    // Alguien tiene q estar preso del Minotauro
+    Ser(
+        vivo == true,
+        libre == false,
+        apresadoPor == $mino
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " derrota al Minotauro"
+    );
+
+    modify($mino) {
+        setVivo(false)
+    }
+
+    // Guardamos quien lo ha derrotado
+    insert(new Hazana(
+        "Derrota", $heroe, $mino
+    ));
+end
+
+
+// Cuando muere el Minotauro, el heroe libera a sus prisioneros
+// Guarda el rescate    como una hazana para utilizarlo despues
+
+rule "03 Liberar del Minotauro"
+when
+    $mino : CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == false
+    )
+
+    // Localizamos al heroe que consiguio la victoria
+    $heroe : Heroe(vivo == true)
+
+    Hazana(
+        tipo == "Derrota",
+        actor == $heroe,
+        objetivo == $mino
+    )
+
+    // Buscamos a los cautivos que siguen vivos
+    $prisionero : Ser(
+        vivo == true,
+        libre == false,
+        apresadoPor == $mino
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " libera a "
+        + $prisionero.getNombre()
+    );
+
+    // Quitamos el captor y devolvemos la libertad
+    modify($prisionero) {
+        setLibre(true),
+        setApresadoPor(null)
+    }
+
+    insert(new Hazana(
+        "Rescate", $heroe, $prisionero
+    ));
+end
+
+
+// Los dioses pueden entregar objetos a los heroes que favorecen
+// Esto funciona para distintos dioses, heroes y objetos
+
+rule "04 Entregar objetos por favor divino"
+when
+    // El dios tiene que estar vivo
+    $dios : Dios(vivo == true)
+
+    // El heroe necesita su favor y estar libre
+    $heroe : Heroe(
+        vivo == true,
+        libre == true,
+        favores contains $dios
+    )
+
+    // eel dios debe tener un objeto disponible
+    $objeto : Objeto(
+        existe == true,
+        roto == false,
+        propietario == $dios
+    )
+then
+    System.out.println(
+        $dios.getNombre() + " entrega "
+        + $objeto.getNombre() + " a "
+        + $heroe.getNombre()
+    );
+
+    // El objeto pasa al heroe
+    modify($objeto) {
+        setPropietario($heroe)
+    }
+end
+
+
+// Un heroe consigue volar si tiene un objeto que da Vuelo
+// No dependemos deun objeto concreto como las sandalias
+
+rule "05 Obtener vuelo"
+when
+    // El heroe aun no debe tener Vuelo
+    $heroe : Heroe(
+        vivo == true,
+        libre == true,
+        capacidades not contains "Vuelo"
+    )
+
+    // Cualquier objeto suyo con capacidad Vuelo sirve
+    $objeto : Objeto(
+        existe == true,
+        roto == false,
+        propietario == $heroe,
+        capacidad != null,
+        capacidad.nombre == "Vuelo"
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " obtiene Vuelo mediante "
+        + $objeto.getNombre()
+    );
+
+    // Anotamos la capacidad en el heroe
+    modify($heroe) {
+        agregarCapacidad("Vuelo")
+    }
+end
+
+
+// Para vencer a Medusa se necesita vuelo, escudo espejo y hoz
+// La victoria se guarda como una hazana
+
+rule "06 Derrotar a Medusa"
+when
+    // El heroe debe estar vivo, libre y saber volar
+    $heroe : Heroe(
+        vivo == true,
+        libre == true,
+        capacidades contains "Vuelo"
+    )
+
+    // Necesita los dos objetos para luchar sin mirarla directamente
+    Objeto(
+        nombre == "EscudoEspejo",
+        existe == true,
+        propietario == $heroe
+    )
+
+    Objeto(
+        nombre == "HozAcero",
+        existe == true,
+        propietario == $heroe
+    )
+
+    // Medusa debe seguir viva
+    $medusa : Gorgona(
+        nombre == "Medusa",
+        vivo == true
+    )
+then
+    System.out.println(
+        $heroe.getNombre() + " derrota a Medusa"
+    );
+
+    modify($medusa) {
+        setVivo(false)
+    }
+
+    // Dejamos registrada la derrota
+    insert(new Hazana(
+        "Derrota", $heroe, $medusa
+    ));
+end
+
+
+// La cabeza aparece cuando un heroe ha derrotado a Medusa
+// Se entrega al mismo heroe que ha conseguido la victoria
+
+rule "07 Obtener cabeza de Medusa"
+when
+    $heroe : Heroe(vivo == true)
+
+    $medusa : Gorgona(
+        nombre == "Medusa",
+        vivo == false
+    )
+
+    // La hazana indica quien ha vencido a Medusa
+    Hazana(
+        tipo == "Derrota",
+        actor == $heroe,
+        objetivo == $medusa
+    )
+
+    // La cabeza aun no debe existir
+    $cabeza : Objeto(
+        nombre == "CabezaMedusa",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " obtiene CabezaMedusa"
+    );
+
+    // Creamos el trofeo y cambiamos su propietario
+    modify($cabeza) {
+        setExiste(true),
+        setPropietario($heroe)
+    }
+end
+
+
+// El heroe utiliza la cabeza de Medusa para petrificar a Ceto
+// La derrota de Ceto tambien queda registrada
+
+rule "08 Derrotar a Ceto"
+when
+    $heroe : Heroe(
+        vivo == true,
+        libre == true
+    )
+
+    // El heroe debe llevar la cabeza de Medusa
+    Objeto(
+        nombre == "CabezaMedusa",
+        existe == true,
+        propietario == $heroe
+    )
+
+    // Buscamos a Ceto con vida
+    $ceto : CriaturaMarina(
+        nombre == "Ceto",
+        vivo == true
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " petrifica a Ceto"
+    );
+
+    // Ceto muere al ser petrificado
+    modify($ceto) {
+        setVivo(false)
+    }
+
+    insert(new Hazana(
+        "Derrota", $heroe, $ceto
+    ));
+end
+
+
+// Tras derrotar a Ceto se puede liberar a Andromeda
+// Anotamos quien la ha rescatado
+
+rule "09 Liberar a Andromeda"
+when
+    $ceto : CriaturaMarina(
+        nombre == "Ceto",
+        vivo == false
+    )
+
+    $heroe : Heroe(
+        vivo == true,
+        libre == true
+    )
+
+    // Comprobamos quien derroto a Ceto
+    Hazana(
+        tipo == "Derrota",
+        actor == $heroe,
+        objetivo == $ceto
+    )
+
+    // Andromeda sigue presa de Ceto
+    $andromeda : Ser(
+        nombre == "Andromeda",
+        vivo == true,
+        libre == false,
+        apresadoPor == $ceto
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " libera a Andromeda"
+    );
+
+    // La dejamos libre y sin captor
+    modify($andromeda) {
+        setLibre(true),
+        setApresadoPor(null)
+    }
+
+    insert(new Hazana(
+        "Rescate", $heroe, $andromeda
+    ));
+end
+
+
+// El heroe que vence al Minotauro recoge su cabeza
+// Esta cabeza servira para el escenario de competicion
+
+rule "10 Obtener cabeza del Minotauro"
+when
+    $heroe : Heroe(vivo == true)
+
+    $mino : CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == false
+    )
+
+    // La victoria debe pertenecer a ese heroe
+    Hazana(
+        tipo == "Derrota",
+        actor == $heroe,
+        objetivo == $mino
+    )
+
+    // La cabeza empieza sin existir
+    $cabeza : Objeto(
+        nombre == "CabezaMinotauro",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " obtiene CabezaMinotauro"
+    );
+
+    // El trofeo pasa al heroe vencedor
+    modify($cabeza) {
+        setExiste(true),
+        setPropietario($heroe)
+    }
+end
+
+
+// El heroe que derrota a Ceto consigue su cabeza
+// Es otro de los trofeos que se necesitan en F2-7
+
+rule "11 Obtener cabeza de Ceto"
+when
+    $heroe : Heroe(vivo == true)
+
+    $ceto : CriaturaMarina(
+        nombre == "Ceto",
+        vivo == false
+    )
+
+    // Comprobamos la victoria sobre Ceto
+    Hazana(
+        tipo == "Derrota",
+        actor == $heroe,
+        objetivo == $ceto
+    )
+
+    // La cabeza aun no tiene propietario
+    $cabeza : Objeto(
+        nombre == "CabezaCeto",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " obtiene CabezaCeto"
+    );
+
+    // El heroe recoge la cabeza
+    modify($cabeza) {
+        setExiste(true),
+        setPropietario($heroe)
+    }
+end
+
+
+// En la competicion, un heroe puede disputar el trofeo a otro
+// El ganador necesita la cabeza de Medusa y la de Ceto
+// La regla tiene prioridad baja para dejar terminar otras acciones
+
+rule "12 Duelo general por CabezaMinotauro"
+salience -10
+when
+    // El duelo solo se permite en la competicion
+    EventoLaberinto(tipo == "Competicion")
+
+    // Buscamos al heroe que puede quedarse con el trofeo
+    $ganador : Heroe(
+        vivo == true,
+        libre == true
+    )
+
+    // El rival es otro heroe que sigue libre
+    $rival : Heroe(
+        this != $ganador,
+        vivo == true,
+        libre == true
+    )
+
+    Hazana(tipo == "Intento", actor == $ganador)
+    Hazana(tipo == "Intento", actor == $rival)
+
+    Arma(
+        nombre == "CabezaMedusa",
+        existe == true,
+        roto == false,
+        propietario == $ganador
+    )
+
+    Objeto(
+        nombre == "CabezaCeto",
+        existe == true,
+        propietario == $ganador
+    )
+
+    // El rival tiene la cabeza del Minotauro
+    $trofeo : Objeto(
+        nombre == "CabezaMinotauro",
+        existe == true,
+        propietario == $rival
+    )
+
+    // Evitamos repetir el mismo duelo
+    not Hazana(tipo == "Duelo", actor == $ganador, objetivo == $rival)
+then
+    System.out.println(
+        $ganador.getNombre() + " vence a " + $rival.getNombre()
+        + " en un duelo y consigue CabezaMinotauro"
+    );
+
+    modify($rival) {
+        setVivo(false)
+    }
+
+    // El trofeo pasa al ganador
+    modify($trofeo) {
+        setPropietario($ganador)
+    }
+
+    insert(new Hazana("Duelo", $ganador, $rival));
+end
+
+
+// Comprobamos si un mismo heroe ha reunido los tres trofeos
+// Cuando los tiene registramos la hazana final
+
+rule "13 Reunir las tres cabezas"
+when
+EventoLaberinto(tipo == "Competicion")
+    $heroe : Heroe(vivo == true)
+
+    // Comprobamos que tenga la cabeza de Medusa
+    Objeto(
+        nombre == "CabezaMedusa",
+        existe == true,
+        propietario == $heroe
+    )
+
+    // Comprobamos que tambien tenga la del Minotauro
+    Objeto(
+        nombre == "CabezaMinotauro",
+        existe == true,
+        propietario == $heroe
+    )
+
+    // Y por ultimo la cabeza de Ceto
+    Objeto(
+        nombre == "CabezaCeto",
+        existe == true,
+        propietario == $heroe
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " ha reunido las tres cabezas"
+    );
+
+    // Guardamos el resultado como hazana
+    insert(new Hazana(
+        "TresCabezas", $heroe, $heroe
+    ));
+end
+
+
+// Los heroes libres participan en el intento de rescate
+// Usa prioridad alta para registrar los intentos antes del combate
+
+rule "14 Intentar rescatar a Andromeda"
+salience 100
+when
+    // Solo se activa si hay competicion
+    EventoLaberinto(tipo == "Competicion")
+
+    // El heroe debe estar vivo y libre
+    $heroe : Heroe(
+        vivo == true,
+        libre == true
+    )
+
+    $andromeda : Ser(
+        nombre == "Andromeda",
+        vivo == true,
+        libre == false
+    )
+
+    // Cada intento se registra una sola vez
+    not Hazana(
+        tipo == "Intento",
+        actor == $heroe,
+        objetivo == $andromeda
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " intenta rescatar a Andromeda"
+    );
+
+    // Anotamos que el heroe lo ha intentado
+    insert(new Hazana(
+        "Intento", $heroe, $andromeda
+    ));
+end
