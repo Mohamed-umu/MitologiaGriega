@@ -1,0 +1,392 @@
+
+package com.sample.rules
+
+import mitologia.modelo.Ser;
+import mitologia.modelo.Personaje;
+import mitologia.modelo.Heroe;
+import mitologia.modelo.Dios;
+import mitologia.modelo.Gorgona;
+import mitologia.modelo.CriaturaMarina;
+import mitologia.modelo.Objeto;
+import mitologia.modelo.VictoriaMedusa;
+
+
+// REGLA 1 - Poseidon castiga a Casiopea
+//si Poseidon esta enfadado con Casiopea envia a Ceto
+//Ceto captura a Andromeda si sigue viva y libre
+
+rule "01 Poseidon castiga a Casiopea"
+when
+    // Buscar al dios Poseidon
+    $poseidon : Dios(nombre == "Poseidon")
+
+    // Comprobamos q Casiopea tenga su enojo
+    Personaje(
+        nombre == "Casiopea",
+        enojos contains $poseidon
+    )
+
+    // Ceto debe seguir vivo
+    $ceto : CriaturaMarina(
+        nombre == "Ceto",
+        vivo == true
+    )
+
+    // Andromeda tiene q estar libre al principio
+    $andromeda : Ser(
+        nombre == "Andromeda",
+        vivo == true,
+        libre == true,
+        apresadoPor == null
+    )
+then
+    System.out.println(
+        "Poseidon envia a Ceto contra Andromeda"
+    );
+
+    // Ceto pasa a ser el captor de Andromeda
+    modify($andromeda) {
+        setApresadoPor($ceto),
+        setLibre(false)
+    }
+end
+
+
+// REGLA 2, Atenea entrega el escudo de bronce
+// El heroe necesita tener el favor de Atenea
+// El escudo tiene q existir y estar en buen estado
+
+rule "02 Atenea entrega EscudoBronce"
+when
+    $atenea : Dios(nombre == "Atenea")
+
+    // Busca un heroe vivo que tenga su favor
+    $heroe : Heroe(
+        vivo == true,
+        favores contains $atenea
+    )
+
+    //Atenea debe tener el escudo
+    $escudo : Objeto(
+        nombre == "EscudoBronce",
+        existe == true,
+        roto == false,
+        propietario == $atenea
+    )
+then
+    System.out.println(
+        "Atenea entrega EscudoBronce a "
+        + $heroe.getNombre()
+    );
+
+    // Cambiamos el propietario del escudo
+    modify($escudo) {
+        setPropietario($heroe)
+    }
+end
+
+
+// REGLA 3-Hermes entrega las sandalias aladas
+// Las sandalias permiten conseguir la capacidad de vuelo
+
+rule "03 Hermes entrega SandaliasAladas"
+when
+    $hermes : Dios(nombre == "Hermes")
+
+    //El heroe necesita el favor de Hermes
+    $heroe : Heroe(
+        vivo == true,
+        favores contains $hermes
+    )
+
+    //Hermes debe tener las sandalias disponibles
+    $sandalias : Objeto(
+        nombre == "SandaliasAladas",
+        existe == true,
+        roto == false,
+        propietario == $hermes
+    )
+then
+    System.out.println(
+        "Hermes entrega SandaliasAladas a "
+        + $heroe.getNombre()
+    );
+
+    // Las sandalias pasan a manos del heroe
+    modify($sandalias) {
+        setPropietario($heroe)
+    }
+end
+
+
+// REGLA 4Hefesto entrega la hoz de acero
+//el heroe la necesitara para enfrentarse a Medusa
+
+rule "04 Hefesto entrega HozAcero"
+when
+    $hefesto : Dios(nombre == "Hefesto")
+
+    // Comprobamos el favor de Hefesto
+    $heroe : Heroe(
+        vivo == true,
+        favores contains $hefesto
+    )
+
+    // La hoz tiene que pertenecer a Hefesto
+    $hoz : Objeto(
+        nombre == "HozAcero",
+        existe == true,
+        roto == false,
+        propietario == $hefesto
+    )
+then
+    System.out.println(
+        "Hefesto entrega HozAcero a "
+        + $heroe.getNombre()
+    );
+
+    // Entregamos la hoz al heroe
+    modify($hoz) {
+        setPropietario($heroe)
+    }
+end
+
+
+// REGLA 5: Hefesto fabrica el escudo espejo
+// El heroe debe tener el escudo de bronce
+// El escudo espejo todavia no debe existir
+
+rule "05 Hefesto fabrica EscudoEspejo"
+when
+    $hefesto : Dios(nombre == "Hefesto")
+
+    //Hace falta el favor de Hefesto
+    $heroe : Heroe(
+        vivo == true,
+        favores contains $hefesto
+    )
+
+    //El heroe debe tener el escudo de bronce
+    $bronce : Objeto(
+        nombre == "EscudoBronce",
+        existe == true,
+        roto == false,
+        propietario == $heroe
+    )
+
+    // Comprobamos que el escudo espejo aun no exista
+    $espejo : Objeto(
+        nombre == "EscudoEspejo",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        "Hefesto transforma EscudoBronce"
+        + " en EscudoEspejo para "
+        + $heroe.getNombre()
+    );
+
+    // El escudo de bronce deja de estar disponible
+    modify($bronce) {
+        setExiste(false),
+        setPropietario(null)
+    }
+
+    // Ahora existe el escudo espejo y pertenece al heroe
+    modify($espejo) {
+        setExiste(true),
+        setPropietario($heroe)
+    }
+end
+
+
+// REGLA 6 - Conseguir la capacidad de vuelo
+// No depende de unas sandalias concretas
+// Cualquier objeto que proporcione Vuelo puede servir
+
+rule "06 Obtener vuelo"
+when
+    // El heroe tiene que estar vivo y no saber volar
+    $heroe : Heroe(
+        vivo == true,
+        capacidades not contains "Vuelo"
+    )
+
+    // Buscamos un objeto suyo que proporcione vuelo
+    $objeto : Objeto(
+        existe == true,
+        roto == false,
+        propietario == $heroe,
+        capacidad != null,
+        capacidad.nombre == "Vuelo"
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " utiliza " + $objeto.getNombre()
+        + " y obtiene Vuelo"
+    );
+
+    // Agregamos la capacidad al heroe
+    modify($heroe) {
+        agregarCapacidad("Vuelo")
+    }
+end
+
+
+// REGLA 7 - Derrotar a Medusa
+// El heroe necesita vuelo, escudo espejo y hoz
+// No obligamos a que sea Perseo quien la derrote
+
+rule "07 Derrotar a Medusa"
+when
+    // Buscamos un heroe vivo que pueda volar
+    $heroe : Heroe(
+        vivo == true,
+        capacidades contains "Vuelo"
+    )
+
+    // Tiene que poseer el escudo espejo
+    Objeto(
+        nombre == "EscudoEspejo",
+        existe == true,
+        roto == false,
+        propietario == $heroe
+    )
+
+    // Tambien necesita la hoz de acero
+    Objeto(
+        nombre == "HozAcero",
+        existe == true,
+        roto == false,
+        propietario == $heroe
+    )
+
+    // Medusa tiene que seguir viva
+    $medusa : Gorgona(
+        nombre == "Medusa",
+        vivo == true
+    )
+then
+    System.out.println(
+        $heroe.getNombre() + " derrota a Medusa"
+    );
+
+    // Medusa pasa a estar muerta
+    modify($medusa) {
+        setVivo(false)
+    }
+
+    // Guardamos que heroe ha conseguido la victoria
+    insert(new VictoriaMedusa($heroe, $medusa));
+end
+
+
+// REGLA 8 - Conseguir la cabeza de Medusa
+// Primero debe existir una victoria sobre Medusa
+// La cabeza se entrega al heroe que la derroto
+
+rule "08 Obtener cabeza de Medusa"
+when
+    // Recuperamos el heroe registrado en la victoria
+    $victoria : VictoriaMedusa(
+        $heroe : heroe
+    )
+
+    // El vencedor tiene que seguir vivo
+    Heroe(
+        this == $heroe,
+        vivo == true
+    )
+
+    // La cabeza todavia no debe estar disponible
+    $cabeza : Objeto(
+        nombre == "CabezaMedusa",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        $heroe.getNombre()
+        + " obtiene CabezaMedusa"
+    );
+
+    // Creamos la cabeza y la asignamos al vencedor
+    modify($cabeza) {
+        setExiste(true),
+        setPropietario($heroe)
+    }
+end
+
+
+// REGLA 9 - Petrificar a Ceto
+// La cabeza de Medusa permite derrotar a Ceto
+// Andromeda tiene que estar apresada por esta criatura
+
+rule "09 Petrificar a Ceto"
+when
+    // Buscamos un heroe que siga vivo
+    $heroe : Heroe(vivo == true)
+
+    //El heroe debe tener la cabeza de Medusa
+    Objeto(
+        nombre == "CabezaMedusa",
+        existe == true,
+        roto == false,
+        propietario == $heroe
+    )
+
+    // Ceto todavia tiene que estar vivo
+    $ceto : CriaturaMarina(
+        nombre == "Ceto",
+        vivo == true
+    )
+
+    // Comprobamos que Ceto sea el captor de Andromeda
+    Ser(
+        nombre == "Andromeda",
+        apresadoPor == $ceto
+    )
+then
+    System.out.println(
+        $heroe.getNombre() + " petrifica a Ceto"
+    );
+
+    // Ceto muere al ser petrificado
+    modify($ceto) {
+        setVivo(false)
+    }
+end
+
+
+// REGLA 10, Liberar a Andromeda
+// Cuando muere la criatura que la tenia presa
+// Andromeda recupera su libertad
+
+rule "10 Liberar a Andromeda"
+when
+    //Andromeda tiene q seguir viva y apresada
+    $andromeda : Ser(
+        nombre == "Andromeda",
+        vivo == true,
+        libre == false,
+        $captor : apresadoPor
+    )
+
+    //Su captor debe ser una criatura marina muerta
+    CriaturaMarina(
+        this == $captor,
+        vivo == false
+    )
+then
+    System.out.println(
+        "Andromeda ha sido liberada"
+    );
+
+    // hay q Marca q ya esta libre y sin captor
+    modify($andromeda) {
+        setLibre(true),
+        setApresadoPor(null)
+    }
+end
