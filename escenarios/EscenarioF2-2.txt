@@ -1,0 +1,8 @@
+# Escenario F2-2 - configuracion inicial editable
+Sesion=laberintoSession
+Pregunta=Logra Teseo vencer al Minotauro e Icaro y Dedalo escapar del laberinto
+Personajes=Humano:Minos;Humano:Ariadna;Heroe:Teseo;Humano:Dedalo;Humano:Icaro;CriaturaTerrestre:Minotauro
+Lugares=Laberinto;Exterior;Cielo;Mar;Costa
+Objetos=ObjetoComun:HiloAriadna:-:Ariadna:true:false;Arma:EspadaTeseo:-:Teseo:true:false;Arma:CuernoMinotauro:-:Minotauro:true:false;ObjetoComun:Plumas:-:-:true:false;ObjetoComun:CeraAbejas:-:-:true:false;ObjetoMagico:AlasDedalo:Vuelo:-:false:false;ObjetoMagico:AlasIcaro:Vuelo:-:false:false
+Ubicacion=Minos:Exterior;Ariadna:Exterior;Teseo:Exterior;Dedalo:Exterior;Icaro:Exterior
+Objetivo=Muerto:Minotauro;Muerto:Icaro;Vivo:Dedalo;Libre:Dedalo;Ubicacion:Dedalo:Costa;Roto:AlasIcaro

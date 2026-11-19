@@ -1,0 +1,9 @@
+# Escenario F2-5 - configuracion inicial editable
+Sesion=nuevosSession
+Pregunta=Puede Perseo liberar a Andromeda si primero esta cautivo del Minotauro
+Personajes=HeroeSemidios:Perseo;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Hermes;Dios:Hefesto;Dios:Poseidon;Gorgona:Medusa;CriaturaMarina:Ceto;Heroe:Teseo;CriaturaTerrestre:Minotauro
+Objetos=ObjetoMagico:EscudoEspejo:Espejo:Atenea:true:false;ObjetoMagico:SandaliasAladas:Vuelo:Hermes:true:false;Arma:HozAcero:-:Hefesto:true:false;Arma:CabezaMedusa:Petrificacion:-:false:false;ObjetoComun:CabezaMinotauro:-:-:false:false;ObjetoComun:CabezaCeto:-:-:false:false;Arma:EspadaTeseo:Combate:Teseo:true:false
+Favor=Perseo:Atenea;Perseo:Hermes;Perseo:Hefesto
+Enojo=Casiopea:Poseidon
+Preso=Perseo:Minotauro
+Objetivo=Muerto:Minotauro;Hazana:Teseo:Rescate:Perseo;Libre:Perseo;Hazana:Perseo:Rescate:Andromeda;Libre:Andromeda

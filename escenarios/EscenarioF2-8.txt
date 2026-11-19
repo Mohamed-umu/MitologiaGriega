@@ -1,0 +1,11 @@
+# Escenario F2-8 - configuracion inicial editable
+Sesion=f8Session
+Pregunta=Puede Ariadna rescatar a Dedalo y liberar a Andromeda con alas y cuerno
+Personajes=Heroina:Ariadna;Humano:Dedalo;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Poseidon;CriaturaTerrestre:Minotauro;Gorgona:Medusa;CriaturaMarina:Ceto
+Lugares=Laberinto
+Objetos=Arma:EspadaAriadna:Combate:Ariadna:true:false;Arma:CuernoMinotauro:Combate:Minotauro:true:false;ObjetoMagico:EscudoEspejo:Espejo:Atenea:true:false;ObjetoComun:Plumas:-:-:true:false;ObjetoComun:CeraAbejas:-:-:true:false;ObjetoMagico:AlasAriadna:Vuelo:-:false:false;Arma:CabezaMedusa:Petrificacion:-:false:false
+Favor=Ariadna:Atenea
+Enojo=Casiopea:Poseidon
+Preso=Dedalo:Minotauro
+Ubicacion=Dedalo:Laberinto
+Objetivo=Muerto:Minotauro;Hazana:Ariadna:Rescate:Dedalo;Posee:Ariadna:CuernoMinotauro;Posee:Ariadna:AlasAriadna;Capacidad:Ariadna:Vuelo;Muerto:Medusa;Posee:Ariadna:CabezaMedusa;Muerto:Ceto;Hazana:Ariadna:Rescate:Andromeda;Libre:Andromeda

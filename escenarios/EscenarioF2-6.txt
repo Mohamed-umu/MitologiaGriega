@@ -1,0 +1,7 @@
+# Escenario F2-6 - configuracion inicial editable
+Sesion=nuevosSession
+Pregunta=Puede Ariadna rescatar a Dedalo del Minotauro
+Personajes=Heroina:Ariadna;Humano:Dedalo;CriaturaTerrestre:Minotauro
+Objetos=Arma:EspadaAriadna:Combate:Ariadna:true:false
+Preso=Dedalo:Minotauro
+Objetivo=Muerto:Minotauro;Hazana:Ariadna:Rescate:Dedalo;Libre:Dedalo
