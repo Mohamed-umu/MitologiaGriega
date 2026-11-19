@@ -1,0 +1,184 @@
+
+package mitologia.reglas.f8
+
+import mitologia.modelo.Heroina;
+import mitologia.modelo.Humano;
+import mitologia.modelo.CriaturaTerrestre;
+import mitologia.modelo.Gorgona;
+import mitologia.modelo.Arma;
+import mitologia.modelo.Objeto;
+import mitologia.modelo.Hazana;
+
+
+// F8-1 Ariadna consigue el cuerno del Minotauro
+// Primero tiene qe haberlo derrotado
+//Despues puede quedarse con el cuerno que tenia la criatura
+
+rule "F8-1 Conseguir cuerno del Minotauro"
+when
+    // Ariadna debe estar viva y libre
+    $ariadna : Heroina(
+        nombre == "Ariadna",
+        vivo == true,
+        libre == true
+    )
+
+    //l Minotauro tiene que estar muerto
+    $mino : CriaturaTerrestre(
+        nombre == "Minotauro",
+        vivo == false
+    )
+
+    // Comprobamos q Ariadna haya sido quien lo derroto
+    Hazana(
+        tipo == "Derrota",
+        actor == $ariadna,
+        objetivo == $mino
+    )
+
+   //El cuerno debe existir y pertenecer al Minotauro
+    $cuerno : Arma(
+        nombre == "CuernoMinotauro",
+        existe == true,
+        roto == false,
+        propietario == $mino
+    )
+then
+    System.out.println(
+        "Ariadna consigue CuernoMinotauro"
+    );
+
+    // Ariadna pasa a ser la propietaria del cuerno
+    modify($cuerno) {
+        setPropietario($ariadna)
+    }
+end
+
+
+// F8-2 Dedalo fabrica las alas para Ariadna
+
+// Como Ariadna lo ha rescatado, Dedalo le ayuda a volar
+// Necesita tener disponibles las plumas y la cera
+
+rule "F8-2 Dedalo fabrica alas para Ariadna"
+when
+    //Ariadna debe seguir viva y libre
+    $ariadna : Heroina(
+        nombre == "Ariadna",
+        vivo == true,
+        libre == true
+    )
+
+    // Dedalo tiene q estar vivo y haber recuperado su libertad
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        libre == true
+    )
+
+    // Comprobamos que Ariadna haya rescatado a Dedalo
+    Hazana(
+        tipo == "Rescate",
+        actor == $ariadna,
+        objetivo == $dedalo
+    )
+
+    // Las plumas tienen que estar disponibles
+    $plumas : Objeto(
+        nombre == "Plumas",
+        existe == true,
+        propietario == null
+    )
+
+    // Tambien necesitamos cera de abejas
+    $cera : Objeto(
+        nombre == "CeraAbejas",
+        existe == true,
+        propietario == null
+    )
+
+  //Las alas todavia no deben estar fabricadas
+    $alas : Objeto(
+        nombre == "AlasAriadna",
+        existe == false,
+        propietario == null
+    )
+then
+    System.out.println(
+        "Dedalo fabrica AlasAriadna con cera y plumas"
+    );
+
+    System.out.println(
+        "Dedalo entrega AlasAriadna a su rescatadora"
+    );
+
+    // Las plumas se consumen al fabricar las alas
+    modify($plumas) {
+        setExiste(false)
+    }
+
+    // La cera tambien se utiliza en la fabricacion
+    modify($cera) {
+        setExiste(false)
+    }
+
+    // Las alas ya existen y pertenecen a Ariadna
+    modify($alas) {
+        setExiste(true),
+        setPropietario($ariadna)
+    }
+end
+
+
+// F8-3 Ariadna derrota a Medusa con el cuerno
+// Para conseguirlo necesita volar y llevar el escudo espejo
+
+// Esta vez utiliza el cuerno en lugar de la hoz de acero
+
+rule "F8-3 Derrotar a Medusa con el cuerno"
+when
+    // Ariadna debe estar viva, libre y tener la capacidad de vuelo
+    $ariadna : Heroina(
+        nombre == "Ariadna",
+        vivo == true,
+        libre == true,
+        capacidades contains "Vuelo"
+    )
+
+    // Necesita el escudo para evitar mirar directamente a Medusa
+    Objeto(
+        nombre == "EscudoEspejo",
+        existe == true,
+        roto == false,
+        propietario == $ariadna
+    )
+
+    //Tambien debe tener el cuerno del Minotauro
+    Arma(
+        nombre == "CuernoMinotauro",
+        existe == true,
+        roto == false,
+        propietario == $ariadna
+    )
+
+  //Medusa tiene que seguir viva
+    $medusa : Gorgona(
+        nombre == "Medusa",
+        vivo == true
+    )
+then
+    System.out.println(
+        "Ariadna derrota a Medusa utilizando"
+        + " el cuerno del Minotauro"
+    );
+
+  // Marcamos la muerte de Medusa
+    modify($medusa) {
+        setVivo(false)
+    }
+
+    // Guardamos la victoria de Ariadna
+    insert(new Hazana(
+        "Derrota", $ariadna, $medusa
+    ));
+end
