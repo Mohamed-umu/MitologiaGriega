@@ -1,0 +1,10 @@
+# Escenario F2-7 - configuracion inicial editable
+Sesion=nuevosSession
+Pregunta=Pueden tres heroes intentar rescatar a Andromeda y reunir Perseo las tres cabezas
+Personajes=HeroeSemidios:Perseo;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Hermes;Dios:Hefesto;Dios:Poseidon;Gorgona:Medusa;CriaturaMarina:Ceto;Heroe:Teseo;HeroeSemidios:Heracles;CriaturaTerrestre:Minotauro
+Objetos=ObjetoMagico:EscudoEspejo:Espejo:Atenea:true:false;ObjetoMagico:SandaliasAladas:Vuelo:Hermes:true:false;Arma:HozAcero:-:Hefesto:true:false;Arma:CabezaMedusa:Petrificacion:-:false:false;ObjetoComun:CabezaMinotauro:-:-:false:false;ObjetoComun:CabezaCeto:-:-:false:false;Arma:EspadaTeseo:Combate:Teseo:true:false
+Favor=Perseo:Atenea;Perseo:Hefesto
+Enojo=Casiopea:Poseidon
+Preso=Heracles:Minotauro
+Evento=Competicion
+Objetivo=Libre:Andromeda;Posee:Perseo:CabezaMedusa;Posee:Perseo:CabezaMinotauro;Posee:Perseo:CabezaCeto;Hazana:Perseo:TresCabezas:Perseo;Hazana:Perseo:Intento:Andromeda;Hazana:Teseo:Intento:Andromeda;Hazana:Heracles:Intento:Andromeda

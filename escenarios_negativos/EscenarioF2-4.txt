@@ -1,0 +1,10 @@
+# Escenario F2-4 - configuracion inicial editable
+Sesion=integradaSession
+Pregunta=Puede Perseo rescatar Andromeda usando AlasDedalo en vez de SandaliasAladas
+Personajes=HeroeSemidios:Perseo;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Hermes;Dios:Hefesto;Dios:Poseidon;Gorgona:Medusa;CriaturaMarina:Ceto;Humano:Minos;Humano:Ariadna;Heroe:Teseo;Humano:Dedalo;Humano:Icaro;CriaturaTerrestre:Minotauro
+Lugares=Laberinto;Exterior;Cielo;Mar;Costa
+Objetos=ObjetoComun:EscudoBronce:-:Atenea:true:false;ObjetoMagico:EscudoEspejo:Espejo:-:false:false;ObjetoMagico:SandaliasAladas:Vuelo:Hermes:true:false;Arma:HozAcero:-:Hefesto:true:false;Arma:CabezaMedusa:Petrificacion:-:false:false;ObjetoComun:HiloAriadna:-:Ariadna:true:false;Arma:EspadaTeseo:-:-:true:false;Arma:CuernoMinotauro:-:Minotauro:true:false;ObjetoComun:Plumas:-:-:true:false;ObjetoComun:CeraAbejas:-:-:true:false;ObjetoMagico:AlasDedalo:Vuelo:-:false:false;ObjetoMagico:AlasIcaro:Vuelo:-:false:false
+Favor=Perseo:Atenea;Perseo:Hefesto
+Enojo=Casiopea:Poseidon
+Ubicacion=Minos:Exterior;Ariadna:Exterior;Teseo:Exterior;Dedalo:Exterior;Icaro:Exterior
+Objetivo=Muerto:Minotauro;Muerto:Icaro;Ubicacion:Dedalo:Costa;Posee:Perseo:AlasDedalo;Capacidad:Perseo:Vuelo;Muerto:Medusa;Muerto:Ceto;Libre:Andromeda
