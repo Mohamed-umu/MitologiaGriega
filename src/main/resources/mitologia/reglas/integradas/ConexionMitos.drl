@@ -1,0 +1,57 @@
+
+package mitologia.reglas.integradas
+
+import mitologia.modelo.Heroe;
+import mitologia.modelo.Humano;
+import mitologia.modelo.Lugar;
+import mitologia.modelo.Objeto;
+
+
+// REGLA 13 - Dedalo entrega sus alas a Perseo
+// Esta regla conecta el mito del laberinto con el de Andromeda
+
+//Perseo podra utilizar las alas de Dedalo en lugar de las sandalias
+
+rule "13 Dedalo entrega sus alas a Perseo"
+when
+    // Necesitamos que exista el lugar Costa
+    $costa : Lugar(nombre == "Costa")
+
+    // Dedalo tiene q haber salido del laberinto
+    // Debe estar vivo, libre y haber llegado a la costa
+    $dedalo : Humano(
+        nombre == "Dedalo",
+        vivo == true,
+        libre == true,
+        ubicacion == $costa
+    )
+
+    // Perseo debe seguir vivo y no tener aun la capacidad de vuelo
+    $perseo : Heroe(
+        nombre == "Perseo",
+        vivo == true,
+        capacidades not contains "Vuelo"
+    )
+
+    // Las alas deben existir y no estar rotas
+    // Ademas tienen que pertenecer a Dedalo y permitir volar
+    $alas : Objeto(
+        nombre == "AlasDedalo",
+        existe == true,
+        roto == false,
+        propietario == $dedalo,
+        capacidad != null,
+        capacidad.nombre == "Vuelo"
+    )
+then
+    // Mostrar la entrega de las alas
+    System.out.println(
+        "Dedalo entrega AlasDedalo a Perseo"
+    );
+
+    // Cambiaa el propietario de las alas
+    // Ahora Perseo podra utilizarlas para conseguir vuelo
+    modify($alas) {
+        setPropietario($perseo)
+    }
+end
