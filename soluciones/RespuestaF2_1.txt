@@ -1,0 +1,24 @@
+ESCENARIO F2-1
+Pregunta: Puede Perseo liberar a Andromeda
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Poseidon envia a Ceto contra Andromeda
+Atenea entrega EscudoBronce a Perseo
+Hermes entrega SandaliasAladas a Perseo
+Hefesto entrega HozAcero a Perseo
+Hefesto transforma EscudoBronce en EscudoEspejo para Perseo
+Perseo utiliza SandaliasAladas y obtiene Vuelo
+Perseo derrota a Medusa
+Perseo obtiene CabezaMedusa
+Perseo petrifica a Ceto
+Andromeda ha sido liberada
+
+COMPROBACIONES DEL OBJETIVO
+Libre:Andromeda = true
+Muerto:Medusa = true
+Muerto:Ceto = true
+Posee:Perseo:CabezaMedusa = true
+Capacidad:Perseo:Vuelo = true
+
+Respuesta: SI
+Reglas activadas: 10

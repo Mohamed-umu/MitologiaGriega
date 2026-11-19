@@ -1,0 +1,27 @@
+ESCENARIO F2-2
+Pregunta: Logra Teseo vencer al Minotauro e Icaro y Dedalo escapar del laberinto
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Minos ordena a Dedalo e Icaro construir el laberinto
+Minos encierra al Minotauro en el laberinto
+Ariadna entrega su hilo a Teseo
+Teseo entra en el laberinto siguiendo el hilo
+Teseo lucha contra el Minotauro y lo mata
+Teseo sale del laberinto gracias al hilo de Ariadna
+Minos castiga a Dedalo e Icaro y los encierra en el laberinto
+Dedalo encuentra plumas y cera de abejas en el laberinto
+Dedalo fabrica dos pares de alas con cera y plumas
+Dedalo e Icaro escapan del laberinto utilizando sus alas
+Icaro vuela demasiado cerca del sol, sus alas se rompen y cae al mar
+Dedalo llega a la costa y sobrevive
+
+COMPROBACIONES DEL OBJETIVO
+Muerto:Minotauro = true
+Muerto:Icaro = true
+Vivo:Dedalo = true
+Libre:Dedalo = true
+Ubicacion:Dedalo:Costa = true
+Roto:AlasIcaro = true
+
+Respuesta: SI
+Reglas activadas: 12

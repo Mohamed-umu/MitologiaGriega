@@ -1,0 +1,35 @@
+ESCENARIO F2-7
+Pregunta: Pueden tres heroes intentar rescatar a Andromeda y reunir Perseo las tres cabezas
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Teseo derrota al Minotauro
+Poseidon envia a Ceto contra Andromeda
+Teseo intenta rescatar a Andromeda
+Perseo intenta rescatar a Andromeda
+Teseo libera a Heracles
+Heracles intenta rescatar a Andromeda
+Hefesto entrega HozAcero a Perseo
+Hermes entrega SandaliasAladas a Perseo
+Atenea entrega EscudoEspejo a Perseo
+Perseo obtiene Vuelo mediante SandaliasAladas
+Perseo derrota a Medusa
+Perseo obtiene CabezaMedusa
+Perseo petrifica a Ceto
+Perseo libera a Andromeda
+Teseo obtiene CabezaMinotauro
+Perseo obtiene CabezaCeto
+Perseo vence a Teseo en un duelo y consigue CabezaMinotauro
+Perseo ha reunido las tres cabezas
+
+COMPROBACIONES DEL OBJETIVO
+Libre:Andromeda = true
+Posee:Perseo:CabezaMedusa = true
+Posee:Perseo:CabezaMinotauro = true
+Posee:Perseo:CabezaCeto = true
+Hazana:Perseo:TresCabezas:Perseo = true
+Hazana:Perseo:Intento:Andromeda = true
+Hazana:Teseo:Intento:Andromeda = true
+Hazana:Heracles:Intento:Andromeda = true
+
+Respuesta: SI
+Reglas activadas: 18

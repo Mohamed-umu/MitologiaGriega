@@ -1,0 +1,39 @@
+ESCENARIO F2-4
+Pregunta: Puede Perseo rescatar Andromeda usando AlasDedalo en vez de SandaliasAladas
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Poseidon envia a Ceto contra Andromeda
+Minos ordena a Dedalo e Icaro construir el laberinto
+Minos encierra al Minotauro en el laberinto
+Atenea entrega EscudoBronce a Perseo
+Ariadna entrega su hilo a Teseo
+Teseo entra en el laberinto siguiendo el hilo
+Hefesto entrega HozAcero a Perseo
+Teseo lucha contra el Minotauro y lo mata
+Hefesto transforma EscudoBronce en EscudoEspejo para Perseo
+Teseo sale del laberinto gracias al hilo de Ariadna
+Minos castiga a Dedalo e Icaro y los encierra en el laberinto
+Dedalo encuentra plumas y cera de abejas en el laberinto
+Dedalo fabrica dos pares de alas con cera y plumas
+Dedalo e Icaro escapan del laberinto utilizando sus alas
+Icaro vuela demasiado cerca del sol, sus alas se rompen y cae al mar
+Dedalo llega a la costa y sobrevive
+Dedalo entrega AlasDedalo a Perseo
+Perseo utiliza AlasDedalo y obtiene Vuelo
+Perseo derrota a Medusa
+Perseo obtiene CabezaMedusa
+Perseo petrifica a Ceto
+Andromeda ha sido liberada
+
+COMPROBACIONES DEL OBJETIVO
+Muerto:Minotauro = true
+Muerto:Icaro = true
+Ubicacion:Dedalo:Costa = true
+Posee:Perseo:AlasDedalo = true
+Capacidad:Perseo:Vuelo = true
+Muerto:Medusa = true
+Muerto:Ceto = true
+Libre:Andromeda = true
+
+Respuesta: SI
+Reglas activadas: 22

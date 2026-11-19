@@ -1,0 +1,14 @@
+ESCENARIO F2-6
+Pregunta: Puede Ariadna rescatar a Dedalo del Minotauro
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Ariadna derrota al Minotauro
+Ariadna libera a Dedalo
+
+COMPROBACIONES DEL OBJETIVO
+Muerto:Minotauro = true
+Hazana:Ariadna:Rescate:Dedalo = true
+Libre:Dedalo = true
+
+Respuesta: SI
+Reglas activadas: 2

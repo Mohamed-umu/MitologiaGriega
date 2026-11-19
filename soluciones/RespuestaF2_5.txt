@@ -1,0 +1,27 @@
+ESCENARIO F2-5
+Pregunta: Puede Perseo liberar a Andromeda si primero esta cautivo del Minotauro
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Teseo derrota al Minotauro
+Poseidon envia a Ceto contra Andromeda
+Teseo libera a Perseo
+Hefesto entrega HozAcero a Perseo
+Hermes entrega SandaliasAladas a Perseo
+Atenea entrega EscudoEspejo a Perseo
+Perseo obtiene Vuelo mediante SandaliasAladas
+Perseo derrota a Medusa
+Perseo obtiene CabezaMedusa
+Perseo petrifica a Ceto
+Perseo libera a Andromeda
+Teseo obtiene CabezaMinotauro
+Perseo obtiene CabezaCeto
+
+COMPROBACIONES DEL OBJETIVO
+Muerto:Minotauro = true
+Hazana:Teseo:Rescate:Perseo = true
+Libre:Perseo = true
+Hazana:Perseo:Rescate:Andromeda = true
+Libre:Andromeda = true
+
+Respuesta: SI
+Reglas activadas: 13

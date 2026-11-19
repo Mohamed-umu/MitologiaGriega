@@ -1,0 +1,31 @@
+ESCENARIO F2-8
+Pregunta: Puede Ariadna rescatar a Dedalo y liberar a Andromeda con alas y cuerno
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Ariadna derrota al Minotauro
+Ariadna consigue CuernoMinotauro
+Poseidon envia a Ceto contra Andromeda
+Ariadna libera a Dedalo
+Dedalo fabrica AlasAriadna con cera y plumas
+Dedalo entrega AlasAriadna a su rescatadora
+Atenea entrega EscudoEspejo a Ariadna
+Ariadna obtiene Vuelo mediante AlasAriadna
+Ariadna derrota a Medusa utilizando el cuerno del Minotauro
+Ariadna obtiene CabezaMedusa
+Ariadna petrifica a Ceto
+Ariadna libera a Andromeda
+
+COMPROBACIONES DEL OBJETIVO
+Muerto:Minotauro = true
+Hazana:Ariadna:Rescate:Dedalo = true
+Posee:Ariadna:CuernoMinotauro = true
+Posee:Ariadna:AlasAriadna = true
+Capacidad:Ariadna:Vuelo = true
+Muerto:Medusa = true
+Posee:Ariadna:CabezaMedusa = true
+Muerto:Ceto = true
+Hazana:Ariadna:Rescate:Andromeda = true
+Libre:Andromeda = true
+
+Respuesta: SI
+Reglas activadas: 11

@@ -1,0 +1,24 @@
+ESCENARIO F2-3
+Pregunta: Puede Teseo liberar a Andromeda
+
+ACONTECIMIENTOS INFERIDOS POR DROOLS
+Poseidon envia a Ceto contra Andromeda
+Atenea entrega EscudoBronce a Teseo
+Hermes entrega SandaliasAladas a Teseo
+Hefesto entrega HozAcero a Teseo
+Hefesto transforma EscudoBronce en EscudoEspejo para Teseo
+Teseo utiliza SandaliasAladas y obtiene Vuelo
+Teseo derrota a Medusa
+Teseo obtiene CabezaMedusa
+Teseo petrifica a Ceto
+Andromeda ha sido liberada
+
+COMPROBACIONES DEL OBJETIVO
+Libre:Andromeda = true
+Muerto:Medusa = true
+Muerto:Ceto = true
+Posee:Teseo:CabezaMedusa = true
+Capacidad:Teseo:Vuelo = true
+
+Respuesta: SI
+Reglas activadas: 10
