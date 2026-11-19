@@ -1,0 +1,8 @@
+# PRUEBA ALTERNATIVA: NO SUSTITUYE AL ESCENARIO OFICIAL
+# Escenario F2-6 - configuracion inicial editable
+Sesion=nuevosSession
+Pregunta=Puede Atalanta rescatar a Dedalo del Minotauro
+Personajes=Heroina:Atalanta;Humano:Dedalo;CriaturaTerrestre:Minotauro
+Objetos=Arma:EspadaAtalanta:Combate:Atalanta:true:false
+Preso=Dedalo:Minotauro
+Objetivo=Muerto:Minotauro;Hazana:Atalanta:Rescate:Dedalo;Libre:Dedalo

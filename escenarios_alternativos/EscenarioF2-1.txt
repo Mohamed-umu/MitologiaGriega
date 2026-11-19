@@ -1,0 +1,9 @@
+# PRUEBA ALTERNATIVA: NO SUSTITUYE AL ESCENARIO OFICIAL
+# Escenario F2-1 - configuracion inicial editable
+Sesion=mitologiaSession
+Pregunta=Puede Teseo liberar a Andromeda
+Personajes=Heroe:Teseo;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Hermes;Dios:Hefesto;Dios:Poseidon;Gorgona:Medusa;CriaturaMarina:Ceto
+Objetos=ObjetoComun:EscudoBronce:-:Atenea:true:false;ObjetoMagico:EscudoEspejo:Espejo:-:false:false;ObjetoMagico:SandaliasAladas:Vuelo:Hermes:true:false;Arma:HozAcero:-:Hefesto:true:false;Arma:CabezaMedusa:Petrificacion:-:false:false
+Favor=Teseo:Atenea;Teseo:Hermes;Teseo:Hefesto
+Enojo=Casiopea:Poseidon
+Objetivo=Libre:Andromeda;Muerto:Medusa;Muerto:Ceto;Posee:Teseo:CabezaMedusa;Capacidad:Teseo:Vuelo

@@ -1,0 +1,10 @@
+# Escenario F2-7 - configuracion inicial editable
+Sesion=nuevosSession
+Pregunta=Puede Atalanta competir con Teseo y Heracles, rescatar a Andromeda y reunir tres cabezas
+Personajes=Heroina:Atalanta;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Hermes;Dios:Hefesto;Dios:Poseidon;Gorgona:Medusa;CriaturaMarina:Ceto;Heroe:Teseo;HeroeSemidios:Heracles;CriaturaTerrestre:Minotauro
+Objetos=ObjetoMagico:EscudoEspejo:Espejo:Atenea:true:false;ObjetoMagico:SandaliasAladas:Vuelo:Hermes:true:false;Arma:HozAcero:-:Hefesto:true:false;Arma:CabezaMedusa:Petrificacion:-:false:false;ObjetoComun:CabezaMinotauro:-:-:false:false;ObjetoComun:CabezaCeto:-:-:false:false;Arma:EspadaTeseo:Combate:Teseo:true:false
+Favor=Atalanta:Atenea;Atalanta:Hermes;Atalanta:Hefesto
+Enojo=Casiopea:Poseidon
+Preso=Heracles:Minotauro
+Evento=Competicion
+Objetivo=Libre:Andromeda;Posee:Atalanta:CabezaMedusa;Posee:Atalanta:CabezaMinotauro;Posee:Atalanta:CabezaCeto;Hazana:Atalanta:TresCabezas:Atalanta;Hazana:Atalanta:Intento:Andromeda;Hazana:Teseo:Intento:Andromeda;Hazana:Heracles:Intento:Andromeda

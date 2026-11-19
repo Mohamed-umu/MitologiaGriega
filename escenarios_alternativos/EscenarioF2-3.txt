@@ -1,0 +1,9 @@
+# PRUEBA ALTERNATIVA: NO SUSTITUYE AL ESCENARIO OFICIAL
+# Escenario F2-3 - configuracion inicial editable
+Sesion=integradaSession
+Pregunta=Puede Perseo liberar a Andromeda
+Personajes=HeroeSemidios:Perseo;Humano:Andromeda;Humano:Casiopea;Dios:Atenea;Dios:Hermes;Dios:Hefesto;Dios:Poseidon;Gorgona:Medusa;CriaturaMarina:Ceto
+Objetos=ObjetoComun:EscudoBronce:-:Atenea:true:false;ObjetoMagico:EscudoEspejo:Espejo:-:false:false;ObjetoMagico:SandaliasAladas:Vuelo:Hermes:true:false;Arma:HozAcero:-:Hefesto:true:false;Arma:CabezaMedusa:Petrificacion:-:false:false
+Favor=Perseo:Atenea;Perseo:Hermes;Perseo:Hefesto
+Enojo=Casiopea:Poseidon
+Objetivo=Libre:Andromeda;Muerto:Medusa;Muerto:Ceto;Posee:Perseo:CabezaMedusa;Capacidad:Perseo:Vuelo
